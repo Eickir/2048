@@ -1,3 +1,10 @@
+mod board;
+use crate::board::board::Board;
+
+
 fn main() {
-    println!("Hello, world!");
+    
+    let mut my_board: Board = Board::new();
+    my_board.display(); 
+
 }
