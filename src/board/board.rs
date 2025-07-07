@@ -66,14 +66,14 @@ impl Board {
         zero_coordinates
     }
 
-    fn move_tiles(&mut self) -> &mut Self {
+    pub fn move_tiles(&mut self) -> &mut Self {
             for row in self.board_game.iter_mut() {
                 row.retain(|&x| x != 0);
             }
             self
         }
 
-    fn sum_tiles(&mut self) -> &mut Self {
+    pub fn sum_tiles(&mut self) -> &mut Self {
         for row in self.board_game.iter_mut() {
             let mut i = 0;
             while i + 1 < row.len() {
@@ -95,7 +95,7 @@ impl Board {
         self
     }
 
-    fn spawn_tiles(&mut self) -> &mut Self {
+    pub fn spawn_tiles(&mut self) -> &mut Self {
         let all_zero_coordinates = self.zero_coordinates();
         let mut rng = rand::rng();
         let new_tile_value = if rng.random_bool(0.9) { 2 } else { 4 };
