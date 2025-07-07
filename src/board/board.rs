@@ -5,7 +5,7 @@ use crate::board::constants::{ROWS, COLS};
 
 #[derive(Debug)]
 pub struct Board {
-    board_game: Vec<Vec<u32>>
+    pub board_game: Vec<Vec<u32>>
 }
 
 // Fonctions associées
@@ -52,6 +52,58 @@ impl Board {
             println!("|");
             println!("+----+----+----+----+");
         }
+    }
+
+    fn zero_coordinates(&self) -> Vec<(usize, usize)> {
+        let mut zero_coordinates: Vec<(usize, usize)> = Vec::new();
+        for row in self.board_game.iter().enumerate() {
+            for element in row.1.iter().enumerate() {
+                if *element.1 == 0 {
+                    zero_coordinates.push((row.0, element.0));
+                }
+            }
+        }
+        zero_coordinates
+    }
+
+    fn move_tiles(&mut self) -> &mut Self {
+            for row in self.board_game.iter_mut() {
+                row.retain(|&x| x != 0);
+            }
+            self
+        }
+
+    fn sum_tiles(&mut self) -> &mut Self {
+        for row in self.board_game.iter_mut() {
+            let mut i = 0;
+            while i + 1 < row.len() {
+                if row[i] != 0 && row[i] == row[i + 1] {
+                    row[i] *= 2;
+                    row[i + 1] = 0;
+                    i += 2; // skip next to avoid double merge
+                } else {
+                    i += 1;
+                }
+            }
+            row.retain(|&x| x != 0);
+
+            while row.len() < 4 {
+                row.push(0);
+            }
+        }
+
+        self
+    }
+
+    fn spawn_tiles(&mut self) -> &mut Self {
+        let all_zero_coordinates = self.zero_coordinates();
+        let mut rng = rand::rng();
+        let new_tile_value = if rng.random_bool(0.9) { 2 } else { 4 };
+        let random_number = rng.random_range(..all_zero_coordinates.len());
+        self.board_game[all_zero_coordinates[random_number].0]
+            [all_zero_coordinates[random_number].1] = new_tile_value;
+
+        self
     }
 
 }
