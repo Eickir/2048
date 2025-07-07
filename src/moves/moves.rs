@@ -1,5 +1,5 @@
 #[derive(Debug)]
-enum Move {
+pub enum Move {
     Left, 
     Right,
     Up, 
