@@ -5,7 +5,8 @@ use crate::board::constants::{ROWS, COLS};
 
 #[derive(Debug)]
 pub struct Board {
-    pub board_game: Vec<Vec<u32>>
+    pub board_game: Vec<Vec<u32>>,
+    pub is_game_over: bool
 }
 
 // Fonctions associées
@@ -25,6 +26,7 @@ impl Board {
 
         Self {
             board_game: board,
+            is_game_over: false
         }
     }
 }
