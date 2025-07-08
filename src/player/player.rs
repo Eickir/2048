@@ -1,3 +1,4 @@
+use crate::player::utils::is_game_over;
 use crate::Move;
 use crate::Board;
 use crate::utils::*;
@@ -32,9 +33,10 @@ impl Player {
         } else {
             change_board(board, player_input, true);
         }
+
+        is_game_over(board);
         
     }
-
 
     
 }
