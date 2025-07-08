@@ -1,5 +1,6 @@
 use crate::Board;
 use crate::Move;
+use strum::IntoEnumIterator;
 
 pub fn change_board<'a>(board: &'a mut Board, player_input: &Move, board_has_been_checked: bool) -> &'a mut Board {
 
@@ -72,6 +73,19 @@ pub fn is_move_possible(board: &Board) -> bool {
     } else {
         false
     }
+}
+
+
+pub fn is_game_over(board: &mut Board) {
+    let any_possible = Move::iter().any(|direction| {
+        change_board(board, &direction, false);
+        let possible = is_move_possible(board);
+        change_board(board, &direction, true);
+        possible
+    });
+
+    board.is_game_over = !any_possible;
+
 }
 
 fn count_non_zero_value(array: &Vec<u32>) -> u32 {

@@ -1,4 +1,4 @@
-use crate::player::utils::is_game_over;
+use crate::board::utils::is_game_over;
 use crate::Move;
 use crate::Board;
 use crate::utils::*;
