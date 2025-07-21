@@ -6,7 +6,7 @@ use crate::board::constants::{ROWS, COLS};
 use crate::Move;
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct Board {
     pub board_game: Vec<Vec<u32>>,
     pub is_game_over: bool
@@ -31,6 +31,16 @@ impl Board {
             board_game: board,
             is_game_over: false
         }
+    }
+
+    #[allow(dead_code)]
+    fn new_for_test(board: Vec<Vec<u32>>) -> Self {
+
+        Self {
+            board_game: board,
+            is_game_over: false
+        }
+
     }
 
 }
@@ -154,7 +164,7 @@ impl Board {
         }
     }
 
-    fn is_game_over(&mut self) {
+    fn is_game_over(&mut self) -> bool {
         let any_possible = Move::iter().any(|direction| {
             self.change_board(&direction, false);
             let possible = self.is_move_possible();
@@ -163,6 +173,7 @@ impl Board {
         });
 
         self.is_game_over = !any_possible;
+        !any_possible
 
     }
 
@@ -233,5 +244,61 @@ impl Board {
             self.is_game_over();
             
         }
+
+}
+
+#[cfg(test)]
+mod tests {
+
+    use super::*;
+    use rstest::*;
+
+    #[fixture]
+    fn new_empty_board() -> Board {
+        let test_board: Vec<Vec<u32>> = vec![[2,0,0,0].to_vec(), [0, 0, 2, 0].to_vec(), [0, 0, 0, 0].to_vec(), [0, 0, 0, 0].to_vec()];
+        Board::new_for_test(test_board)
+
+    }
+
+    #[fixture]
+    fn game_over_board() -> Board {
+        let test_board: Vec<Vec<u32>> = vec![[4,2,4,2].to_vec(), [2, 4, 2, 4].to_vec(), [4, 2, 4, 2].to_vec(), [2, 4, 2, 4].to_vec()];
+        Board::new_for_test(test_board)
+    }
+
+    // Test in case the game is not over 
+    #[rstest]
+    fn board_match_testing_array(new_empty_board: Board) {
+        let test_board: Vec<Vec<u32>> = vec![[2,0,0,0].to_vec(), [0, 0, 2, 0].to_vec(), [0, 0, 0, 0].to_vec(), [0, 0, 0, 0].to_vec()];
+        let expected_board = Board::new_for_test(test_board);
+        assert_eq!(new_empty_board, expected_board);
+        
+
+    }
+
+    #[rstest]
+    fn game_is_not_game_over_at_creation(mut new_empty_board: Board) {
+        assert!(!new_empty_board.is_game_over());
+    }
+
+    #[rstest]
+    fn move_is_possible(new_empty_board: Board) {
+        assert!(new_empty_board.is_move_possible());
+    }
+
+
+    // Test in case the game is over 
+    #[rstest]
+    fn no_move_is_possible(game_over_board: Board) {
+        assert!(!game_over_board.is_move_possible());
+    }
+
+
+    #[rstest]
+    fn game_over(mut game_over_board: Board) {
+        assert!(game_over_board.is_game_over());
+    }
+
+
 
 }
