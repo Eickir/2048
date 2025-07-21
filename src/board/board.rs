@@ -33,6 +33,7 @@ impl Board {
         }
     }
 
+    #[allow(dead_code)]
     fn new_for_test(board: Vec<Vec<u32>>) -> Self {
 
         Self {
