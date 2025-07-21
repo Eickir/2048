@@ -5,21 +5,10 @@ mod moves;
 use std::io;
 use crate::moves::moves::Move;
 use std::io::Write;
-mod player; 
-use crate::player::player::Player;
-mod game; 
-use crate::game::game::Game;
-
-
 
 fn main() {
     
     let mut my_board: Board = Board::new();
-    println!("Enter your name: ");
-    let mut username = String::new();
-    io::stdin().read_line(&mut username).unwrap();
-    let my_player: Player = Player::new(String::from(username.trim()));
-    let my_game: Game = Game::new(&my_player);
 
     while !my_board.is_game_over {
         
@@ -49,7 +38,7 @@ fn main() {
             }
         };
 
-        my_player.make_move(&mut my_board, &player_move);
+        my_board.make_move(&player_move);
         
     }
     println!("You lost!");
